@@ -1,22 +1,13 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-# Tool to help write new image for E310/312
-# Scans connected drives and lists them to user
-# Complete Tool Should:
-#   * List drives to help user find memory card
-#   * Format memory card
-#   * Write image to memory card (dd)
+# Form implementation generated from reading ui file 'e310_image_updater.ui'
+#
+# Created: Sat Apr 23 00:30:01 2016
+#      by: PyQt4 UI code generator 4.10.4
+#
+# WARNING! All changes made in this file will be lost!
 
-import subprocess
-import sys
-
-# GUI Imports
-from PyQt4 import QtGui, QtCore
-import PyQt4.Qwt5 as Qwt
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-
-__version__ = "0.1.0" # Version String
+from PyQt4 import QtCore, QtGui
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -32,7 +23,6 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-## COPY GENERATED PyQT HERE ##
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
@@ -105,40 +95,4 @@ class Ui_MainWindow(object):
         self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
         self.actionAbout.setText(_translate("MainWindow", "About", None))
         self.actionExit.setText(_translate("MainWindow", "Exit", None))
-## END GENERATED PyQT HERE ##
 
-class Main(QtGui.QMainWindow,Ui_MainWindow):
-    
-    def __init__(self):
-        QtGui.QMainWindow.__init__(self)
-        self.ui=Ui_MainWindow()
-        self.ui.setupUi(self)
-
-
-def get_disk_names():
-    # Get output of lsblk
-    lsblk = subprocess.Popen(['lsblk'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
-    # Strip out lines that are 'disk' types (not partitions)
-    blockdevs = [line.strip() for line in lsblk.stdout if 'disk' in line]
-
-    returncode = lsblk.wait()
-
-    if returncode:
-        print("Something happened!")
-
-    for devices in blockdevs:
-        print devices
-
-if __name__ == '__main__':
-
-    if sys.platform.startswith('linux'):
-        # Should show interface now
-        get_disk_names()
-        app = QtGui.QApplication(sys.argv)
-        window = Main()
-        window.show()
-        sys.exit(app.exec_())
-    else:
-        print "Only Linux Support now!"
-    
