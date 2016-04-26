@@ -9,6 +9,7 @@
 
 import subprocess
 import sys
+import os
 
 # GUI Imports
 from PyQt4 import QtGui, QtCore
@@ -36,7 +37,8 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(529, 206)
+        MainWindow.resize(529, 216)
+        MainWindow.setTabShape(QtGui.QTabWidget.Rounded)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.verticalLayout_2 = QtGui.QVBoxLayout(self.centralwidget)
@@ -66,10 +68,10 @@ class Ui_MainWindow(object):
         spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem1, 0, 2, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout_2)
-        self.progressBar = QtGui.QProgressBar(self.centralwidget)
-        self.progressBar.setProperty("value", 24)
-        self.progressBar.setObjectName(_fromUtf8("progressBar"))
-        self.verticalLayout_2.addWidget(self.progressBar)
+        self.progress_write_image = QtGui.QProgressBar(self.centralwidget)
+        self.progress_write_image.setProperty("value", 0)
+        self.progress_write_image.setObjectName(_fromUtf8("progress_write_image"))
+        self.verticalLayout_2.addWidget(self.progress_write_image)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtGui.QStatusBar(MainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -105,7 +107,9 @@ class Ui_MainWindow(object):
         self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
         self.actionAbout.setText(_translate("MainWindow", "About", None))
         self.actionExit.setText(_translate("MainWindow", "Exit", None))
+
 ## END GENERATED PyQT HERE ##
+
 
 class Main(QtGui.QMainWindow,Ui_MainWindow):
     
@@ -114,27 +118,66 @@ class Main(QtGui.QMainWindow,Ui_MainWindow):
         self.ui=Ui_MainWindow()
         self.ui.setupUi(self)
 
+        # Push Button Actions
+        self.ui.button_input_file.clicked.connect(self.select_image_file)
+        self.ui.button_write_image.clicked.connect(self.write_image)
+        self.ui.button_select_sd.clicked.connect(self.select_sd_card)
 
-def get_disk_names():
-    # Get output of lsblk
-    lsblk = subprocess.Popen(['lsblk'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        self.image_file = ""
 
-    # Strip out lines that are 'disk' types (not partitions)
-    blockdevs = [line.strip() for line in lsblk.stdout if 'disk' in line]
 
-    returncode = lsblk.wait()
+    def select_image_file(self):
+        # Open dialog for user to select file (Get full file name/directory)
+        temp_file = QtGui.QFileDialog.getOpenFileName(self, 'Select Image File')
+        if not temp_file:
+            # If nothing was selected, null string is returned
+            self.ui.text_input_file.setText("Image File")
+        else:
+            self.ui.text_input_file.setText(temp_file)
+            self.image_file = temp_file
 
-    if returncode:
-        print("Something happened!")
+    def write_image(self):
+        # Execute on button press "Write Image" (button_write_image)
+        print "Write Image Now!"
+        self.get_image_size()
 
-    for devices in blockdevs:
-        print devices
+    def image_progress(self):
+        pass     
+
+    def get_image_size(self):
+        # Get the size of the image file in bytes
+        # Use to update write progress
+        if not self.image_file:
+            pass
+        else:
+            self.image_size = os.path.getsize(self.image_file)
+            print "Image Size: %d bytes" % self.image_size
+
+    def select_sd_card(self):
+        # Exectue on button press "Select Drive" (button_select_sd)
+        self.get_disk_names()
+
+
+
+    def get_disk_names(self):
+        # Get output of lsblk
+        lsblk = subprocess.Popen(['lsblk'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+        # Strip out lines that are 'disk' types (not partitions)
+        blockdevs = [line.strip() for line in lsblk.stdout if 'disk' in line]
+
+        returncode = lsblk.wait()
+
+        if returncode:
+            print("Something happened!")
+
+        for devices in blockdevs:
+            print devices
 
 if __name__ == '__main__':
 
     if sys.platform.startswith('linux'):
         # Should show interface now
-        get_disk_names()
         app = QtGui.QApplication(sys.argv)
         window = Main()
         window.show()

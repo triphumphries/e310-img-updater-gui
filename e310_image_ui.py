@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'e310_image_updater.ui'
 #
-# Created: Sat Apr 23 00:30:01 2016
+# Created: Sat Apr 23 10:54:51 2016
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,8 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(529, 206)
+        MainWindow.resize(529, 216)
+        MainWindow.setTabShape(QtGui.QTabWidget.Rounded)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.verticalLayout_2 = QtGui.QVBoxLayout(self.centralwidget)
@@ -56,10 +57,10 @@ class Ui_MainWindow(object):
         spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem1, 0, 2, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout_2)
-        self.progressBar = QtGui.QProgressBar(self.centralwidget)
-        self.progressBar.setProperty("value", 24)
-        self.progressBar.setObjectName(_fromUtf8("progressBar"))
-        self.verticalLayout_2.addWidget(self.progressBar)
+        self.progress_write_image = QtGui.QProgressBar(self.centralwidget)
+        self.progress_write_image.setProperty("value", 0)
+        self.progress_write_image.setObjectName(_fromUtf8("progress_write_image"))
+        self.verticalLayout_2.addWidget(self.progress_write_image)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtGui.QStatusBar(MainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))

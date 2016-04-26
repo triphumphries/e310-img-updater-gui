@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>529</width>
-    <height>206</height>
+    <width>663</width>
+    <height>216</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -85,9 +88,9 @@
      </layout>
     </item>
     <item>
-     <widget class="QProgressBar" name="progressBar">
+     <widget class="QProgressBar" name="progress_write_image">
       <property name="value">
-       <number>24</number>
+       <number>0</number>
       </property>
      </widget>
     </item>
@@ -99,7 +102,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>529</width>
+     <width>663</width>
      <height>27</height>
     </rect>
    </property>
